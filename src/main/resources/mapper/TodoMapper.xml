@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.questing.mapper.TodoMapper">
+
+    <select id="findTodosByDate" resultType="com.app.questing.dto.TodoDTO">
+        SELECT
+            id,
+            user_id,
+            title,
+            todo_date,
+            category,
+            time_slot,
+            completed,
+            duration_time,
+            completed_at,
+            created_at,
+            updated_at,
+            deleted_at
+        FROM todos
+        WHERE user_id = #{userId}
+          AND todo_date = #{todoDate}
+          AND deleted_at IS NULL
+        ORDER BY
+            CASE time_slot
+                WHEN 'MORNING' THEN 1
+                WHEN 'AFTERNOON' THEN 2
+                WHEN 'EVENING' THEN 3
+                WHEN 'DAWN'    THEN 4
+                ELSE 99
+            END,
+            created_at asc
+    </select>
+
+    <select id="findTodoById" resultType="com.app.questing.dto.TodoDTO">
+        SELECT
+            id,
+            user_id,
+            title,
+            todo_date,
+            category,
+            time_slot,
+            completed,
+            duration_time,
+            completed_at,
+            created_at,
+            updated_at,
+            deleted_at
+        FROM todos
+        WHERE id = #{id}
+          AND user_id = #{userId}
+          AND deleted_at IS NULL
+    </select>
+
+    <insert id="insertTodo" parameterType="com.app.questing.dto.TodoDTO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO todos (
+            user_id,
+            time_slot,
+            category,
+            title,
+            duration_time,
+            todo_date,
+            completed
+        ) VALUES (
+            #{userId},
+            #{timeSlot},
+            #{category},
+            #{title},
+            #{durationTime},
+            #{todoDate},
+            #{completed}
+        )
+    </insert>
+
+    <update id="updateTodo">
+        UPDATE todos
+        SET
+            title = #{title},
+            category = #{category},
+            time_slot = #{timeSlot},
+            duration_time = #{durationTime},
+            updated_at = NOW()
+        WHERE id = #{id}
+          AND user_id = #{userId}
+          AND deleted_at IS NULL
+    </update>
+
+    <update id="deleteTodo">
+        UPDATE todos
+        SET
+            deleted_at = NOW()
+        WHERE id = #{id}
+          AND user_id = #{userId}
+          AND deleted_at IS NULL
+    </update>
+
+    <update id="completeTodo">
+        UPDATE todos
+        SET
+            completed = true,
+            completed_at = NOW(),
+            updated_at = NOW()
+        WHERE id = #{id}
+          AND user_id = #{userId}
+          AND deleted_at IS NULL
+          AND completed = false
+    </update>
+</mapper>
