@@ -2,9 +2,9 @@ package com.app.questing.controller;
 
 import com.app.questing.dto.TodoCreateRequest;
 import com.app.questing.dto.TodoResponse;
+import com.app.questing.dto.TodoUpdateRequest;
 import com.app.questing.service.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class TodoController {
 
     @PutMapping("/{todoId}")
     public TodoResponse updateTodo(@PathVariable Long todoId,
-                                   @RequestBody TodoCreateRequest request) {
+                                   @RequestBody TodoUpdateRequest request) {
         return todoService.updateTodo(todoId, request);
     }
 

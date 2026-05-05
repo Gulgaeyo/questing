@@ -3,9 +3,9 @@ package com.app.questing.service;
 import com.app.questing.dto.TodoCreateRequest;
 import com.app.questing.dto.TodoDTO;
 import com.app.questing.dto.TodoResponse;
+import com.app.questing.dto.TodoUpdateRequest;
 import com.app.questing.mapper.TodoMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.parser.TE;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,7 +45,7 @@ public class TodoService {
         return toResponse(savedTodo);
     }
 
-    public TodoResponse updateTodo(Long todoId, TodoCreateRequest request) {
+    public TodoResponse updateTodo(Long todoId, TodoUpdateRequest request) {
         TodoDTO todo = todoMapper.findTodoById(todoId, TEMP_USER_ID);
 
         if(todo == null) {

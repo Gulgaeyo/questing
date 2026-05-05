@@ -8,5 +8,5 @@ public class TodoUpdateRequest {
     private String timeSlot;
     private String title;
     private String category;
-    private String durationTime;
+    private Integer durationTime;
 }
