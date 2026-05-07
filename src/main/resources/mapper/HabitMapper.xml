@@ -5,6 +5,7 @@
 <mapper namespace="com.app.questing.mapper.HabitMapper">
 
     <select id="getTodayHabits" resultType="com.app.questing.dto.HabitDTO">
+        <![CDATA[
         SELECT
             id,
             user_id,
@@ -14,11 +15,14 @@
             strt_date,
             end_date,
             created_at,
-            updated_dt
+            updated_at
         FROM habits
-        WHERE strt_date >= CURRENT_DATE
-          AND user_id = #{user_id}
+        WHERE 1=1
+          AND strt_date <= CURRENT_DATE
+          AND end_date >= CURRENT_DATE
+          AND user_id = #{userId}
           AND deleted_at IS NULL
+          ]]>
     </select>
 
     <select id="findHabitById" resultType="com.app.questing.dto.HabitDTO">
@@ -31,10 +35,10 @@
             strt_date,
             end_date,
             created_at,
-            updated_dt
+            updated_at
         FROM habits
         WHERE id = #{id}
-          AND user_id = #{user_id}
+          AND user_id = #{userId}
           AND deleted_at IS NULL
     </select>
 
@@ -48,22 +52,22 @@
             strt_date,
             end_date,
             created_at,
-            updated_dt
+            updated_at
         FROM habits
         WHERE category = #{category}
-        AND user_id = #{user_id}
+        AND user_id = #{userId}
         AND deleted_at IS NULL
     </select>
 
     <insert id="insertHabit" parameterType="com.app.questing.dto.HabitDTO"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO habits (
+        INSERT INTO habits(
             user_id,
             title,
             content,
             category,
             strt_date,
-            end_date,
+            end_date
         ) VALUES (
             #{userId},
             #{title},
