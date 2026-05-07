@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.questing.mapper.HabitMapper">
+
+    <select id="getTodayHabits" resultType="com.app.questing.dto.HabitDTO">
+        SELECT
+            id,
+            user_id,
+            title,
+            content,
+            category,
+            strt_date,
+            end_date,
+            created_at,
+            updated_dt
+        FROM habits
+        WHERE strt_date >= CURRENT_DATE
+          AND user_id = #{user_id}
+          AND deleted_at IS NULL
+    </select>
+
+    <select id="findHabitById" resultType="com.app.questing.dto.HabitDTO">
+        SELECT
+            id,
+            user_id,
+            title,
+            content,
+            category,
+            strt_date,
+            end_date,
+            created_at,
+            updated_dt
+        FROM habits
+        WHERE id = #{id}
+          AND user_id = #{user_id}
+          AND deleted_at IS NULL
+    </select>
+
+    <select id="findHabitByCategory" resultType="com.app.questing.dto.HabitDTO">
+        SELECT
+            id,
+            user_id,
+            title,
+            content,
+            category,
+            strt_date,
+            end_date,
+            created_at,
+            updated_dt
+        FROM habits
+        WHERE category = #{category}
+        AND user_id = #{user_id}
+        AND deleted_at IS NULL
+    </select>
+
+    <insert id="insertHabit" parameterType="com.app.questing.dto.HabitDTO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO habits (
+            user_id,
+            title,
+            content,
+            category,
+            strt_date,
+            end_date,
+        ) VALUES (
+            #{userId},
+            #{title},
+            #{content},
+            #{category},
+            #{strtDate},
+            #{endDate}
+        )
+    </insert>
+
+    <update id="updateHabit">
+        UPDATE habits
+        SET
+            title = #{title},
+            content = #{content},
+            category = #{category},
+            strt_date = #{strtDate},
+            end_date = #{endDate},
+            updated_at = NOW()
+        WHERE user_id = #{userId}
+          AND id = #{id}
+          AND deleted_at IS NULL
+    </update>
+
+    <update id="deleteHabit">
+        UPDATE habits
+        SET
+            deleted_at = NOW()
+        WHERE user_id = #{userId}
+          AND id = #{id}
+          AND deleted_at IS NULL
+    </update>
+
+
+</mapper>
