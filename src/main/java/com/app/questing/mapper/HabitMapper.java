@@ -1,6 +1,7 @@
 package com.app.questing.mapper;
 
 import com.app.questing.dto.HabitDTO;
+import com.app.questing.dto.HabitLogDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,4 +29,11 @@ public interface HabitMapper {
 
     int deleteHabit(@Param("id") Long id,
                     @Param("userId") Long userId);
+
+    //HabitLogMapper
+    HabitLogDTO findTodayHabitLog(@Param("userId") Long userId,
+                                  @Param("habitId") Long habitId,
+                                  @Param("completedDate") LocalDate completedDate);
+
+    void insertHabitLog(HabitLogDTO habitLog);
 }

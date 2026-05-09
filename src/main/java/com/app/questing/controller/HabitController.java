@@ -1,5 +1,6 @@
 package com.app.questing.controller;
 
+import com.app.questing.dto.HabitCompleteResponse;
 import com.app.questing.dto.HabitCreateRequest;
 import com.app.questing.dto.HabitDTO;
 import com.app.questing.dto.HabitUpdateRequest;
@@ -32,6 +33,11 @@ public class HabitController {
 
     @DeleteMapping("/{habitId}")
     public void deleteHabit(@PathVariable Long habitId){habitService.deleteHabit(habitId);}
+
+    @PatchMapping("/{habitId}/complete")
+    public HabitCompleteResponse completeHabit(@PathVariable Long habitId){
+        return habitService.completeHabit(habitId);
+    }
 
 
 }

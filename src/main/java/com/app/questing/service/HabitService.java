@@ -1,8 +1,6 @@
 package com.app.questing.service;
 
-import com.app.questing.dto.HabitCreateRequest;
-import com.app.questing.dto.HabitDTO;
-import com.app.questing.dto.HabitUpdateRequest;
+import com.app.questing.dto.*;
 import com.app.questing.mapper.HabitMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -99,5 +97,52 @@ public class HabitService {
 
         return response;
 
+    }
+
+    //Habit Log Service
+    public HabitCompleteResponse completeHabit(Long habitId){
+        LocalDate today = LocalDate.now();
+
+        HabitDTO habit = habitMapper.findHabitById(habitId, TEMP_USER_ID);
+
+        if(habit == null) {
+            throw new IllegalArgumentException("존재하지 않는 Habit입니다.");
+        }
+
+        HabitLogDTO todayLog = habitMapper.findTodayHabitLog(TEMP_USER_ID, habitId, today);
+
+        if(todayLog != null) {
+            return toCompleteResponse(habitId, todayLog, true);
+        }
+
+        HabitLogDTO habitLog = new HabitLogDTO();
+        habitLog.setUserId(TEMP_USER_ID);
+        habitLog.setHabitId(habitId);
+        habitLog.setCompletedDate(today);
+        habitLog.setCategory(habit.getCategory());
+        habitLog.setDurationTime(habit.getDurationTime());
+        habitLog.setEarnedExp(habit.getDurationTime());
+
+        habitMapper.insertHabitLog(habitLog);
+
+        HabitLogDTO savedHabitLog = habitMapper.findTodayHabitLog(TEMP_USER_ID, habitId, today);
+
+        return toCompleteResponse(habitId, savedHabitLog, true);
+    }
+
+    private HabitCompleteResponse toCompleteResponse(Long habitId,
+                                                     HabitLogDTO habitLog,
+                                                     boolean isCompleted) {
+        HabitCompleteResponse response = new HabitCompleteResponse();
+
+        response.setHabitId(habitId);
+        response.setIsCompleted(isCompleted);
+        response.setCompletedDate(habitLog.getCompletedDate());
+        response.setCompletedAt(habitLog.getCompletedAt());
+        response.setCategory(habitLog.getCategory());
+        response.setDurationTime(habitLog.getDurationTime());
+        response.setEarnedExp(habitLog.getEarnedExp());
+
+        return response;
     }
 }
