@@ -36,6 +36,7 @@ public class HabitService {
         habit.setTitle(request.getTitle());
         habit.setContent(request.getContent());
         habit.setCategory(request.getCategory());
+        habit.setDurationTime(request.getDurationTime());
         habit.setStrtDate(request.getStrtDate());
         habit.setEndDate(request.getEndDate());
         habit.setCreatedAt(LocalDateTime.now());
@@ -57,6 +58,7 @@ public class HabitService {
         habit.setTitle(request.getTitle());
         habit.setCategory(request.getCategory());
         habit.setContent(request.getContent());
+        habit.setDurationTime(request.getDurationTime());
         habit.setStrtDate(request.getStrtDate());
         habit.setEndDate(request.getEndDate());
 
@@ -89,6 +91,7 @@ public class HabitService {
         response.setTitle(habit.getTitle());
         response.setContent(habit.getContent());
         response.setCategory(habit.getCategory());
+        response.setDurationTime(habit.getDurationTime());
         response.setStrtDate(habit.getStrtDate());
         response.setEndDate(habit.getEndDate());
         response.setCreatedAt(habit.getCreatedAt());

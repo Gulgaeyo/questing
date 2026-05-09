@@ -12,6 +12,7 @@
             title,
             content,
             category,
+            duration_time,
             strt_date,
             end_date,
             created_at,
@@ -32,6 +33,7 @@
             title,
             content,
             category,
+            duration_time,
             strt_date,
             end_date,
             created_at,
@@ -49,6 +51,7 @@
             title,
             content,
             category,
+            duration_time,
             strt_date,
             end_date,
             created_at,
@@ -66,6 +69,7 @@
             title,
             content,
             category,
+            duration_time,
             strt_date,
             end_date
         ) VALUES (
@@ -84,6 +88,7 @@
             title = #{title},
             content = #{content},
             category = #{category},
+            duration_time = #{durationTime},
             strt_date = #{strtDate},
             end_date = #{endDate},
             updated_at = NOW()

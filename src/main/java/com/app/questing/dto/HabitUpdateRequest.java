@@ -12,6 +12,7 @@ public class HabitUpdateRequest {
     private String title;
     private String content;
     private String category;
+    private Integer durationTime;
     private LocalDate strtDate;
     private LocalDate endDate;
 
