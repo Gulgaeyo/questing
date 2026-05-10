@@ -2,6 +2,7 @@ package com.app.questing.mapper;
 
 import com.app.questing.dto.HabitDTO;
 import com.app.questing.dto.HabitLogDTO;
+import com.app.questing.dto.HabitTodayResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,8 +12,7 @@ import java.util.List;
 @Mapper
 public interface HabitMapper {
 
-    List<HabitDTO> getTodayHabits(@Param("userId") Long userId,
-                                  @Param("strtDate") LocalDate today);
+    List<HabitDTO> getTodayHabits(@Param("userId") Long userId);
     HabitDTO findHabitById(@Param("id") Long id,
                            @Param("userId") Long userId);
 
@@ -36,4 +36,7 @@ public interface HabitMapper {
                                   @Param("completedDate") LocalDate completedDate);
 
     void insertHabitLog(HabitLogDTO habitLog);
+
+    // Today 조회용
+    List<HabitTodayResponse> findTodayHabitsWithCompletion(@Param("userId") Long userId);
 }

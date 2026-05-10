@@ -18,9 +18,8 @@ public class HabitService {
 
 
     public List<HabitDTO> getTodayHabits(){
-        LocalDate today = LocalDate.now();
 
-        return habitMapper.getTodayHabits(TEMP_USER_ID, today)
+        return habitMapper.getTodayHabits(TEMP_USER_ID)
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -144,5 +143,10 @@ public class HabitService {
         response.setEarnedExp(habitLog.getEarnedExp());
 
         return response;
+    }
+
+    //Today Habit Service
+    public List<HabitTodayResponse> getTodayHabitsWishCompletion(){
+        return habitMapper.findTodayHabitsWithCompletion(TEMP_USER_ID);
     }
 }

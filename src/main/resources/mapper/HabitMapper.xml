@@ -145,5 +145,33 @@
         )
     </insert>
 
-
+    <select id="findTodayHabitsWithCompletion" resultType="com.app.questing.dto.HabitTodayResponse">
+        <![CDATA[
+        SELECT
+            h.id,
+            h.user_id,
+            h.title,
+            h.content,
+            h.category,
+            h.duration_time,
+            h.strt_date,
+            h.end_date,
+            CASE
+                WHEN hl.id IS NOT NULL THEN true
+                ELSE false
+            END AS completed_today
+        FROM habits h
+        LEFT JOIN habit_logs hl
+            ON h.id = hl.habit_id
+           AND h.user_id = hl.user_id
+           AND hl.completed_date = CURRENT_DATE
+           AND hl.deleted_at IS NULL
+        WHERE 1=1
+          AND h.strt_date <= CURRENT_DATE
+          AND (h.end_date IS NULL OR h.end_date >= CURRENT_DATE)
+          AND h.user_id = #{userId}
+          AND h.deleted_at IS NULL
+        ORDER BY h.created_at ASC
+        ]]>
+    </select>
 </mapper>

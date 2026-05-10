@@ -43,3 +43,4 @@ Request
 GET /api/habits  
 PUT /api/habits/{habitId}   
 DELETE /api/habits/{habitId}    
+PATCH /api/habits/{habitId}/complete  
