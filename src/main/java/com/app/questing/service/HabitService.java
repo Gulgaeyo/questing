@@ -14,6 +14,7 @@ import java.util.List;
 public class HabitService {
 
     private final HabitMapper habitMapper;
+    private final UserStatService userStatService;
     private static final Long TEMP_USER_ID = 1L;
 
 
@@ -124,6 +125,13 @@ public class HabitService {
 
         habitMapper.insertHabitLog(habitLog);
 
+        //User Stat Service
+        UserStatResult statResult = userStatService.addProgress(
+                TEMP_USER_ID,
+                habit.getCategory(),
+                habit.getDurationTime()
+        );
+
         HabitLogDTO savedHabitLog = habitMapper.findTodayHabitLog(TEMP_USER_ID, habitId, today);
 
         return toCompleteResponse(habitId, savedHabitLog, true);
@@ -149,4 +157,6 @@ public class HabitService {
     public List<HabitTodayResponse> getTodayHabitsWishCompletion(){
         return habitMapper.findTodayHabitsWithCompletion(TEMP_USER_ID);
     }
+
+
 }

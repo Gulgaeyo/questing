@@ -17,6 +17,8 @@ public class TodoService {
 
     private final TodoMapper todoMapper;
 
+    private final UserStatService userStatService;
+
     private static final Long TEMP_USER_ID = 1L;
 
     public List<TodoResponse> getTodayTodos(){
@@ -91,6 +93,12 @@ public class TodoService {
         if (completedCount == 0){
             throw new IllegalArgumentException("TODO 완료 처리에 실패했습니다.");
         }
+
+        userStatService.addProgress(
+                TEMP_USER_ID,
+                todo.getCategory(),
+                todo.getDurationTime()
+        );
 
         TodoDTO completedTodo = todoMapper.findTodoById(todoId, TEMP_USER_ID);
         return toResponse(completedTodo);

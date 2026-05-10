@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.questing.mapper.UserStatMapper">
+
+    <select id="findByUserId" resultType="com.app.questing.dto.UserStatDTO">
+        SELECT
+            user_id,
+            str_stat,
+            str_min,
+            men_stat,
+            men_min,
+            int_stat,
+            int_min,
+            created_at,
+            updated_at
+        FROM user_stats
+        WHERE user_id = #{userId}
+    </select>
+
+    <update id="updateStrength" parameterType="com.app.questing.dto.UserStatDTO">
+        UPDATE user_stats
+        SET
+            str_stat=#{strStat},
+            str_min=#{strMin},
+            updated_at = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateMental" parameterType="com.app.questing.dto.UserStatDTO">
+        UPDATE user_stats
+        SET
+            men_stat=#{menStat},
+            men_min=#{menMin},
+            updated_at= NOW()
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateIntelligence" parameterType="com.app.questing.dto.UserStatDTO">
+        UPDATE user_stats
+        SET
+            int_stat = #{intStat},
+            int_min = #{intMin},
+            updated_at = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
+
+</mapper>
