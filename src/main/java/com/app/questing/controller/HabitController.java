@@ -1,9 +1,6 @@
 package com.app.questing.controller;
 
-import com.app.questing.dto.HabitCompleteResponse;
-import com.app.questing.dto.HabitCreateRequest;
-import com.app.questing.dto.HabitDTO;
-import com.app.questing.dto.HabitUpdateRequest;
+import com.app.questing.dto.*;
 import com.app.questing.service.HabitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +32,7 @@ public class HabitController {
     public void deleteHabit(@PathVariable Long habitId){habitService.deleteHabit(habitId);}
 
     @PatchMapping("/{habitId}/complete")
-    public HabitCompleteResponse completeHabit(@PathVariable Long habitId){
+    public QuestCompleteResponse completeHabit(@PathVariable Long habitId){
         return habitService.completeHabit(habitId);
     }
 

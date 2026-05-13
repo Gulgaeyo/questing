@@ -15,6 +15,7 @@ public class HabitService {
 
     private final HabitMapper habitMapper;
     private final UserStatService userStatService;
+    private final RewardMessageService rewardMessageService;
     private static final Long TEMP_USER_ID = 1L;
 
 
@@ -100,7 +101,7 @@ public class HabitService {
     }
 
     //Habit Log Service
-    public HabitCompleteResponse completeHabit(Long habitId){
+    public QuestCompleteResponse completeHabit(Long habitId){
         LocalDate today = LocalDate.now();
 
         HabitDTO habit = habitMapper.findHabitById(habitId, TEMP_USER_ID);
@@ -112,7 +113,7 @@ public class HabitService {
         HabitLogDTO todayLog = habitMapper.findTodayHabitLog(TEMP_USER_ID, habitId, today);
 
         if(todayLog != null) {
-            return toCompleteResponse(habitId, todayLog, true);
+            return toAlreadyCompletedResponse(todayLog);
         }
 
         HabitLogDTO habitLog = new HabitLogDTO();
@@ -134,24 +135,59 @@ public class HabitService {
 
         HabitLogDTO savedHabitLog = habitMapper.findTodayHabitLog(TEMP_USER_ID, habitId, today);
 
-        return toCompleteResponse(habitId, savedHabitLog, true);
+        return toCompleteResponse(habitId, savedHabitLog, true, statResult);
     }
 
-    private HabitCompleteResponse toCompleteResponse(Long habitId,
+    private QuestCompleteResponse toCompleteResponse(Long habitId,
                                                      HabitLogDTO habitLog,
-                                                     boolean isCompleted) {
-        HabitCompleteResponse response = new HabitCompleteResponse();
+                                                     boolean isCompleted,
+                                                     UserStatResult statResult) {
+        QuestCompleteResponse response = new QuestCompleteResponse();
 
-        response.setHabitId(habitId);
+        response.setQuestType("HABIT");
+        response.setQuestId(habitId);
+
         response.setIsCompleted(isCompleted);
         response.setCompletedDate(habitLog.getCompletedDate());
         response.setCompletedAt(habitLog.getCompletedAt());
+
         response.setCategory(habitLog.getCategory());
         response.setDurationTime(habitLog.getDurationTime());
         response.setEarnedExp(habitLog.getEarnedExp());
 
+        response.setGainedStat(statResult.getGainedStat());
+        response.setRemainingMinutes(statResult.getRemainingMinutes());
+        response.setCurrentStat(statResult.getCurrentStat());
+
+        response.setMessage(rewardMessageService.createRewardMessage(statResult));
+
         return response;
     }
+
+    // 이미 완료된 Habit response
+    private QuestCompleteResponse toAlreadyCompletedResponse(HabitLogDTO habitLog) {
+        QuestCompleteResponse response = new QuestCompleteResponse();
+
+        response.setQuestType("HABIT");
+        response.setQuestId(habitLog.getHabitId());
+
+        response.setIsCompleted(true);
+        response.setCompletedDate(habitLog.getCompletedDate());
+        response.setCompletedAt(habitLog.getCompletedAt());
+
+        response.setCategory(habitLog.getCategory());
+        response.setDurationTime(habitLog.getDurationTime());
+        response.setEarnedExp(habitLog.getEarnedExp());
+
+        response.setGainedStat(0);
+        response.setRemainingMinutes(null);
+        response.setCurrentStat(null);
+        response.setMessage(rewardMessageService.createAlreadyCompletedMessage());
+
+        return response;
+    }
+
+
 
     //Today Habit Service
     public List<HabitTodayResponse> getTodayHabitsWishCompletion(){

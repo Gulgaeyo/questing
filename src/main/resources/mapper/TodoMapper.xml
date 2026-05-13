@@ -12,7 +12,7 @@
             todo_date,
             category,
             time_slot,
-            completed,
+            is_completed,
             duration_time,
             completed_at,
             created_at,
@@ -41,7 +41,7 @@
             todo_date,
             category,
             time_slot,
-            completed,
+            is_completed,
             duration_time,
             completed_at,
             created_at,
@@ -62,7 +62,7 @@
             title,
             duration_time,
             todo_date,
-            completed
+            is_completed
         ) VALUES (
             #{userId},
             #{timeSlot},
@@ -70,7 +70,7 @@
             #{title},
             #{durationTime},
             #{todoDate},
-            #{completed}
+            #{isCompleted}
         )
     </insert>
 
@@ -99,12 +99,12 @@
     <update id="completeTodo">
         UPDATE todos
         SET
-            completed = true,
+            is_completed = true,
             completed_at = NOW(),
             updated_at = NOW()
         WHERE id = #{id}
           AND user_id = #{userId}
           AND deleted_at IS NULL
-          AND completed = false
+          AND is_completed = false
     </update>
 </mapper>

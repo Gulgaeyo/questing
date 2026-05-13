@@ -1,5 +1,6 @@
 package com.app.questing.controller;
 
+import com.app.questing.dto.QuestCompleteResponse;
 import com.app.questing.dto.TodoCreateRequest;
 import com.app.questing.dto.TodoResponse;
 import com.app.questing.dto.TodoUpdateRequest;
@@ -38,7 +39,7 @@ public class TodoController {
     }
 
     @PatchMapping("/{todoId}/complete")
-    public TodoResponse completeTodo(@PathVariable Long todoId){
+    public QuestCompleteResponse completeTodo(@PathVariable Long todoId){
         return todoService.completeTodo(todoId);
     }
 

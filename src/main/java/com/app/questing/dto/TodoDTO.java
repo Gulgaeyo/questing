@@ -14,7 +14,7 @@ public class TodoDTO {
     private String title;
     private String category;
     private Integer durationTime;
-    private Boolean completed;
+    private Boolean isCompleted;
     private LocalDateTime completedAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
