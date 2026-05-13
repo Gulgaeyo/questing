@@ -1,5 +1,4 @@
-package com.app.questing.dto;
-
+package com.app.questing.dto.habit;
 
 import lombok.Data;
 
@@ -7,16 +6,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class QuestCompleteResponse{
+public class HabitCompleteResponse {
 
-    private String questType;
-    private Long questId;
-
+    private Long habitId;
     private Boolean isCompleted;
-
     private LocalDate completedDate;
     private LocalDateTime completedAt;
-
     private String category;
     private Integer durationTime;
     private Integer earnedExp;
@@ -26,4 +21,5 @@ public class QuestCompleteResponse{
     private Integer currentStat;
 
     private String message;
+
 }

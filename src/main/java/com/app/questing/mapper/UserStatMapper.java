@@ -1,6 +1,6 @@
 package com.app.questing.mapper;
 
-import com.app.questing.dto.UserStatDTO;
+import com.app.questing.dto.stat.UserStatDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

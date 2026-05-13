@@ -1,14 +1,12 @@
-package com.app.questing.dto;
-
+package com.app.questing.dto.habit;
 
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class HabitTodayResponse {
+public class HabitUpdateRequest {
 
-    private Long habitId;
     private Long userId;
     private String title;
     private String content;
@@ -16,5 +14,5 @@ public class HabitTodayResponse {
     private Integer durationTime;
     private LocalDate strtDate;
     private LocalDate endDate;
-    private Boolean completedToday;
+
 }

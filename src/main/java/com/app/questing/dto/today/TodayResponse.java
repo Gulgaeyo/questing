@@ -1,5 +1,7 @@
-package com.app.questing.dto;
+package com.app.questing.dto.today;
 
+import com.app.questing.dto.habit.HabitTodayResponse;
+import com.app.questing.dto.todo.TodoResponse;
 import lombok.Data;
 
 import java.time.LocalDate;

@@ -1,6 +1,6 @@
 package com.app.questing.service;
 
-import com.app.questing.dto.TodayResponse;
+import com.app.questing.dto.today.TodayResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

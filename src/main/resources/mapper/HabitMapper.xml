@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.app.questing.mapper.HabitMapper">
 
-    <select id="getTodayHabits" resultType="com.app.questing.dto.HabitDTO">
+    <select id="getTodayHabits" resultType="com.app.questing.dto.habit.HabitDTO">
         <![CDATA[
         SELECT
             id,
@@ -26,7 +26,7 @@
           ]]>
     </select>
 
-    <select id="findHabitById" resultType="com.app.questing.dto.HabitDTO">
+    <select id="findHabitById" resultType="com.app.questing.dto.habit.HabitDTO">
         SELECT
             id,
             user_id,
@@ -44,7 +44,7 @@
           AND deleted_at IS NULL
     </select>
 
-    <select id="findHabitByCategory" resultType="com.app.questing.dto.HabitDTO">
+    <select id="findHabitByCategory" resultType="com.app.questing.dto.habit.HabitDTO">
         SELECT
             id,
             user_id,
@@ -62,7 +62,7 @@
         AND deleted_at IS NULL
     </select>
 
-    <insert id="insertHabit" parameterType="com.app.questing.dto.HabitDTO"
+    <insert id="insertHabit" parameterType="com.app.questing.dto.habit.HabitDTO"
             useGeneratedKeys="true" keyProperty="id">
         INSERT INTO habits(
             user_id,
@@ -107,7 +107,7 @@
           AND deleted_at IS NULL
     </update>
 
-    <select id="findTodayHabitLog" resultType="com.app.questing.dto.HabitLogDTO">
+    <select id="findTodayHabitLog" resultType="com.app.questing.dto.habit.HabitLogDTO">
         SELECT
             id,
             user_id,
@@ -126,7 +126,7 @@
           AND deleted_at IS NULL
     </select>
 
-    <insert id="insertHabitLog" parameterType="com.app.questing.dto.HabitLogDTO"
+    <insert id="insertHabitLog" parameterType="com.app.questing.dto.habit.HabitLogDTO"
             useGeneratedKeys="true" keyProperty="id">
         INSERT INTO habit_logs (
             user_id,
@@ -145,7 +145,7 @@
         )
     </insert>
 
-    <select id="findTodayHabitsWithCompletion" resultType="com.app.questing.dto.HabitTodayResponse">
+    <select id="findTodayHabitsWithCompletion" resultType="com.app.questing.dto.habit.HabitTodayResponse">
         <![CDATA[
         SELECT
             h.id,

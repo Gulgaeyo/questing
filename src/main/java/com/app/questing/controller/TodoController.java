@@ -1,9 +1,9 @@
 package com.app.questing.controller;
 
-import com.app.questing.dto.QuestCompleteResponse;
-import com.app.questing.dto.TodoCreateRequest;
-import com.app.questing.dto.TodoResponse;
-import com.app.questing.dto.TodoUpdateRequest;
+import com.app.questing.dto.quest.QuestCompleteResponse;
+import com.app.questing.dto.todo.TodoCreateRequest;
+import com.app.questing.dto.todo.TodoResponse;
+import com.app.questing.dto.todo.TodoUpdateRequest;
 import com.app.questing.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package com.app.questing.controller;
 
-import com.app.questing.dto.TodayResponse;
+import com.app.questing.dto.today.TodayResponse;
 import com.app.questing.service.TodayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

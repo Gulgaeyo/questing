@@ -1,8 +1,8 @@
 package com.app.questing.mapper;
 
-import com.app.questing.dto.HabitDTO;
-import com.app.questing.dto.HabitLogDTO;
-import com.app.questing.dto.HabitTodayResponse;
+import com.app.questing.dto.habit.HabitDTO;
+import com.app.questing.dto.habit.HabitLogDTO;
+import com.app.questing.dto.habit.HabitTodayResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

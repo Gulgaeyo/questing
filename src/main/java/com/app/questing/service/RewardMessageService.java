@@ -1,6 +1,6 @@
 package com.app.questing.service;
 
-import com.app.questing.dto.UserStatResult;
+import com.app.questing.dto.stat.UserStatResult;
 import org.springframework.stereotype.Service;
 
 @Service

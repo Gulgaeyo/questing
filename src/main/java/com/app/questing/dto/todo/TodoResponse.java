@@ -1,4 +1,4 @@
-package com.app.questing.dto;
+package com.app.questing.dto.todo;
 
 import lombok.Data;
 
@@ -6,8 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class TodoDTO {
-    private Long id;
+public class TodoResponse {
+    private Long Id;
     private Long userId;
     private LocalDate todoDate;
     private String timeSlot;

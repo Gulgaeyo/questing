@@ -1,10 +1,9 @@
-package com.app.questing.dto;
+package com.app.questing.dto.todo;
 
 import lombok.Data;
 
 @Data
-public class TodoUpdateRequest {
-    private Long userId;
+public class TodoCreateRequest {
     private String timeSlot;
     private String title;
     private String category;

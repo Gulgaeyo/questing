@@ -1,9 +1,6 @@
 package com.app.questing.mapper;
 
-import com.app.questing.dto.TodoCreateRequest;
-import com.app.questing.dto.TodoDTO;
-import com.app.questing.dto.TodoResponse;
-import com.app.questing.dto.TodoUpdateRequest;
+import com.app.questing.dto.todo.TodoDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

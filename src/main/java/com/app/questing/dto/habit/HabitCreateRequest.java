@@ -1,22 +1,16 @@
-package com.app.questing.dto;
+package com.app.questing.dto.habit;
 
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
-public class HabitDTO {
+public class HabitCreateRequest {
 
-    private Long id;
-    private Long userId;
     private String title;
     private String content;
     private String category;
     private Integer durationTime;
     private LocalDate strtDate;
     private LocalDate endDate;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
 }

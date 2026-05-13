@@ -1,4 +1,4 @@
-package com.app.questing.dto;
+package com.app.questing.dto.stat;
 
 import lombok.Data;
 

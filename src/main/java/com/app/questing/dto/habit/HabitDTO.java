@@ -1,4 +1,4 @@
-package com.app.questing.dto;
+package com.app.questing.dto.habit;
 
 import lombok.Data;
 
@@ -6,16 +6,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class TodoResponse {
-    private Long Id;
+public class HabitDTO {
+
+    private Long id;
     private Long userId;
-    private LocalDate todoDate;
-    private String timeSlot;
     private String title;
+    private String content;
     private String category;
     private Integer durationTime;
-    private Boolean isCompleted;
-    private LocalDateTime completedAt;
+    private LocalDate strtDate;
+    private LocalDate endDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
 }

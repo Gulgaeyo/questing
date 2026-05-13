@@ -1,6 +1,9 @@
 package com.app.questing.controller;
 
-import com.app.questing.dto.*;
+import com.app.questing.dto.habit.HabitCreateRequest;
+import com.app.questing.dto.habit.HabitDTO;
+import com.app.questing.dto.habit.HabitUpdateRequest;
+import com.app.questing.dto.quest.QuestCompleteResponse;
 import com.app.questing.service.HabitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

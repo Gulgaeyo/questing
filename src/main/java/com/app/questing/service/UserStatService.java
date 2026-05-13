@@ -1,7 +1,7 @@
 package com.app.questing.service;
 
-import com.app.questing.dto.UserStatDTO;
-import com.app.questing.dto.UserStatResult;
+import com.app.questing.dto.stat.UserStatDTO;
+import com.app.questing.dto.stat.UserStatResult;
 import com.app.questing.mapper.UserStatMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +13,10 @@ public class UserStatService {
     private static final int MINUTES_PER_STAT = 30;
 
     private final UserStatMapper userStatMapper;
+
+    public UserStatDTO getUserStat(Long userId){
+        return userStatMapper.findByUserId(userId);
+    }
 
     public UserStatResult addProgress(Long userId, String category, Integer durationTime){
         UserStatDTO userStat = userStatMapper.findByUserId(userId);
