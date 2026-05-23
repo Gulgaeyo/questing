@@ -14,4 +14,6 @@ public interface UserStatMapper {
     int updateMental(UserStatDTO userStat);
 
     int updateIntelligence(UserStatDTO userStat);
+
+    int insertUserStat(@Param("userId") Long userId);
 }

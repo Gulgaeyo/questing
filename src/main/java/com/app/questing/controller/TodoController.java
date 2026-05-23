@@ -18,29 +18,33 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping
-    public List<TodoResponse> getTodayTodos(){
-        return todoService.getTodayTodos();
+    public List<TodoResponse> getTodayTodos(@RequestAttribute Long userId){
+        return todoService.getTodayTodos(userId);
     }
 
     @PostMapping
-    public TodoResponse createTodo(@RequestBody TodoCreateRequest request) {
-        return todoService.createTodo(request);
+    public TodoResponse createTodo(@RequestAttribute Long userId,
+                                   @RequestBody TodoCreateRequest request) {
+        return todoService.createTodo(userId, request);
     }
 
     @PutMapping("/{todoId}")
-    public TodoResponse updateTodo(@PathVariable Long todoId,
+    public TodoResponse updateTodo(@RequestAttribute Long userId,
+                                   @PathVariable Long todoId,
                                    @RequestBody TodoUpdateRequest request) {
-        return todoService.updateTodo(todoId, request);
+        return todoService.updateTodo(userId, todoId, request);
     }
 
     @DeleteMapping("/{todoId}")
-    public void deleteTodo(@PathVariable Long todoId){
-        todoService.deleteTodo(todoId);
+    public void deleteTodo(@RequestAttribute Long userId,
+                           @PathVariable Long todoId){
+        todoService.deleteTodo(userId, todoId);
     }
 
     @PatchMapping("/{todoId}/complete")
-    public QuestCompleteResponse completeTodo(@PathVariable Long todoId){
-        return todoService.completeTodo(todoId);
+    public QuestCompleteResponse completeTodo(@RequestAttribute Long userId,
+                                              @PathVariable Long todoId){
+        return todoService.completeTodo(userId, todoId);
     }
 
 }

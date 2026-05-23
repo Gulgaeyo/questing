@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.questing.mapper.UserMapper">
+
+    <select id="findByLoginId" resultType="com.app.questing.dto.user.UserDTO">
+        SELECT
+            id,
+            login_id,
+            password,
+            user_name,
+            nick_name,
+            birth,
+            email,
+            created_at,
+            updated_at,
+            deleted_at
+        FROM users
+        WHERE login_id = #{loginId}
+          AND deleted_at IS NULL
+    </select>
+
+    <select id="findByEmail" resultType="com.app.questing.dto.user.UserDTO">
+        SELECT
+            id,
+            login_id,
+            password,
+            user_name,
+            nick_name,
+            birth,
+            email,
+            created_at,
+            updated_at,
+            deleted_at
+        FROM users
+        WHERE email = #{email}
+        AND deleted_at IS NULL
+    </select>
+
+    <select id="findByNickName" resultType="com.app.questing.dto.user.UserDTO">
+        SELECT
+        id,
+        login_id,
+        password,
+        user_name,
+        nick_name,
+        birth,
+        email,
+        created_at,
+        updated_at,
+        deleted_at
+        FROM users
+        WHERE nick_name = #{nickName}
+        AND deleted_at IS NULL
+    </select>
+
+
+    <insert id="insertUser"
+            parameterType="com.app.questing.dto.user.UserDTO"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO users(
+            login_id,
+            password,
+            user_name,
+            nick_name,
+            birth,
+            email
+        ) VALUES (
+            #{loginId},
+            #{password},
+            #{userName},
+            #{nickName},
+            #{birth},
+            #{email}
+        )
+    </insert>
+
+    <select id="existsByLoginId" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1
+            FROM users
+            WHERE login_id = #{loginId}
+              AND deleted_at IS NULL
+        )
+    </select>
+
+    <select id="existsByEmail" resultType="boolean">
+        SELECT EXISTS(
+        SELECT 1
+        FROM users
+        WHERE email = #{email}
+        AND deleted_at IS NULL
+        )
+    </select>
+
+    <select id="existsByNickName" resultType="boolean">
+        SELECT EXISTS(
+        SELECT 1
+        FROM users
+        WHERE nick_name = #{nickName}
+        AND deleted_at IS NULL
+        )
+    </select>
+
+</mapper>

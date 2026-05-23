@@ -19,22 +19,21 @@ public class TodoService {
 
     private final TodoMapper todoMapper;
     private final UserStatService userStatService;
-    private static final Long TEMP_USER_ID = 1L;
     private final RewardMessageService rewardMessageService;
 
-    public List<TodoResponse> getTodayTodos(){
+    public List<TodoResponse> getTodayTodos(Long userId){
         LocalDate today = LocalDate.now();
 
-        return todoMapper.findTodosByDate(TEMP_USER_ID, today)
+        return todoMapper.findTodosByDate(userId, today)
                 .stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    public TodoResponse createTodo(TodoCreateRequest request){
+    public TodoResponse createTodo(Long userId, TodoCreateRequest request){
         TodoDTO todo = new TodoDTO();
 
-        todo.setUserId(TEMP_USER_ID);
+        todo.setUserId(userId);
         todo.setTitle(request.getTitle());
         todo.setTodoDate(LocalDate.now());
         todo.setTimeSlot(request.getTimeSlot());
@@ -44,12 +43,12 @@ public class TodoService {
 
         todoMapper.insertTodo(todo);
 
-        TodoDTO savedTodo = todoMapper.findTodoById(todo.getId(), TEMP_USER_ID);
+        TodoDTO savedTodo = todoMapper.findTodoById(todo.getId(), userId);
         return toResponse(savedTodo);
     }
 
-    public TodoResponse updateTodo(Long todoId, TodoUpdateRequest request) {
-        TodoDTO todo = todoMapper.findTodoById(todoId, TEMP_USER_ID);
+    public TodoResponse updateTodo(Long userId, Long todoId, TodoUpdateRequest request) {
+        TodoDTO todo = todoMapper.findTodoById(todoId, userId);
 
         if(todo == null) {
             throw new IllegalArgumentException("존재하지 않는 TODO입니다.");
@@ -66,20 +65,20 @@ public class TodoService {
             throw new IllegalArgumentException("TODO 수정에 실패했습니다.");
         }
 
-        TodoDTO updatedTodo = todoMapper.findTodoById(todoId, TEMP_USER_ID);
+        TodoDTO updatedTodo = todoMapper.findTodoById(todoId, userId);
         return toResponse(updatedTodo);
     }
 
-    public void deleteTodo(Long todoId){
-        int deletedCount = todoMapper.deleteTodo(todoId, TEMP_USER_ID);
+    public void deleteTodo(Long userId, Long todoId){
+        int deletedCount = todoMapper.deleteTodo(todoId, userId);
 
         if (deletedCount == 0){
             throw new IllegalArgumentException("존재하지 않는 TODO 입니다.");
         }
     }
 
-    public QuestCompleteResponse completeTodo(Long todoId){
-        TodoDTO todo = todoMapper.findTodoById(todoId, TEMP_USER_ID);
+    public QuestCompleteResponse completeTodo(Long userId, Long todoId){
+        TodoDTO todo = todoMapper.findTodoById(todoId, userId);
 
         if(todo == null){
             throw new IllegalArgumentException("존재하지 않는 TODO입니다.");
@@ -89,21 +88,21 @@ public class TodoService {
             return toAlreadyCompletedResponse(todo);
         }
 
-        int completedCount = todoMapper.completeTodo(todoId, TEMP_USER_ID);
+        int completedCount = todoMapper.completeTodo(todoId, userId);
 
         if (completedCount == 0){
             throw new IllegalArgumentException("TODO 완료 처리에 실패했습니다.");
         }
 
         UserStatResult statResult = userStatService.addProgress(
-                TEMP_USER_ID,
+                todo.getUserId(),
                 todo.getCategory(),
                 todo.getDurationTime()
         );
 
         String message = rewardMessageService.createRewardMessage(statResult);
 
-        TodoDTO completedTodo = todoMapper.findTodoById(todoId, TEMP_USER_ID);
+        TodoDTO completedTodo = todoMapper.findTodoById(todoId, userId);
 
         return toQuestCompleteResponse(completedTodo, statResult);
     }

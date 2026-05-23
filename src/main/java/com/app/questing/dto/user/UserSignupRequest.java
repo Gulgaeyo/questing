@@ -2,6 +2,8 @@ package com.app.questing.dto.user;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class UserSignupRequest {
 
@@ -9,7 +11,7 @@ public class UserSignupRequest {
     private String password;
     private String userName;
     private String nickName;
-    private String birth;
+    private LocalDate birth;
     private String email;
 
 }

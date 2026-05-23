@@ -4,6 +4,7 @@ import com.app.questing.dto.today.TodayResponse;
 import com.app.questing.service.TodayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,7 @@ public class TodayController {
     private final TodayService todayService;
 
     @GetMapping
-    public TodayResponse getToday(){
-        return todayService.getToday();
+    public TodayResponse getToday(@RequestAttribute Long userId){
+        return todayService.getToday(userId);
     }
 }

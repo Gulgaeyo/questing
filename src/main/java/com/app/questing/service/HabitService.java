@@ -18,22 +18,22 @@ public class HabitService {
     private final HabitMapper habitMapper;
     private final UserStatService userStatService;
     private final RewardMessageService rewardMessageService;
-    private static final Long TEMP_USER_ID = 1L;
 
 
-    public List<HabitDTO> getTodayHabits(){
+    public List<HabitDTO> getTodayHabits(Long userId){
 
-        return habitMapper.getTodayHabits(TEMP_USER_ID)
+        return habitMapper.getTodayHabits(userId)
                 .stream()
                 .map(this::toResponse)
                 .toList();
 
     }
 
-    public HabitDTO createHabit(HabitCreateRequest request){
+    public HabitDTO createHabit(Long userId,
+                                HabitCreateRequest request){
         HabitDTO habit = new HabitDTO();
 
-        habit.setUserId(TEMP_USER_ID);
+        habit.setUserId(userId);
         habit.setTitle(request.getTitle());
         habit.setContent(request.getContent());
         habit.setCategory(request.getCategory());
@@ -44,13 +44,13 @@ public class HabitService {
 
         habitMapper.insertHabit(habit);
 
-        HabitDTO savedHabit = habitMapper.findHabitById(habit.getId(), TEMP_USER_ID);
+        HabitDTO savedHabit = habitMapper.findHabitById(habit.getId(), userId);
 
         return toResponse(savedHabit);
     }
 
-    public HabitDTO updateHabit(Long habitId, HabitUpdateRequest request){
-        HabitDTO habit = habitMapper.findHabitById(habitId, TEMP_USER_ID);
+    public HabitDTO updateHabit(Long userId, Long habitId, HabitUpdateRequest request){
+        HabitDTO habit = habitMapper.findHabitById(habitId, userId);
 
         if(habit == null){
             throw new IllegalArgumentException("존재하지 않는 Habit입니다.");
@@ -69,14 +69,14 @@ public class HabitService {
             throw new IllegalArgumentException("Habit 수정에 실패했습니다.");
         }
 
-        HabitDTO updatedHabit = habitMapper.findHabitById(habitId, TEMP_USER_ID);
+        HabitDTO updatedHabit = habitMapper.findHabitById(habitId, userId);
 
         return toResponse(updatedHabit);
 
     }
 
-    public void deleteHabit(Long habitId){
-        int deletedCount = habitMapper.deleteHabit(habitId, TEMP_USER_ID);
+    public void deleteHabit(Long userId, Long habitId){
+        int deletedCount = habitMapper.deleteHabit(habitId, userId);
 
         if(deletedCount == 0){
             throw new IllegalArgumentException("존재하지 않는 Habit입니다.");
@@ -103,23 +103,23 @@ public class HabitService {
     }
 
     //Habit Log Service
-    public QuestCompleteResponse completeHabit(Long habitId){
+    public QuestCompleteResponse completeHabit(Long userId, Long habitId){
         LocalDate today = LocalDate.now();
 
-        HabitDTO habit = habitMapper.findHabitById(habitId, TEMP_USER_ID);
+        HabitDTO habit = habitMapper.findHabitById(habitId, userId);
 
         if(habit == null) {
             throw new IllegalArgumentException("존재하지 않는 Habit입니다.");
         }
 
-        HabitLogDTO todayLog = habitMapper.findTodayHabitLog(TEMP_USER_ID, habitId, today);
+        HabitLogDTO todayLog = habitMapper.findTodayHabitLog(userId, habitId, today);
 
         if(todayLog != null) {
             return toAlreadyCompletedResponse(todayLog);
         }
 
         HabitLogDTO habitLog = new HabitLogDTO();
-        habitLog.setUserId(TEMP_USER_ID);
+        habitLog.setUserId(habit.getUserId());
         habitLog.setHabitId(habitId);
         habitLog.setCompletedDate(today);
         habitLog.setCategory(habit.getCategory());
@@ -130,12 +130,12 @@ public class HabitService {
 
         //User Stat Service
         UserStatResult statResult = userStatService.addProgress(
-                TEMP_USER_ID,
+                habit.getUserId(),
                 habit.getCategory(),
                 habit.getDurationTime()
         );
 
-        HabitLogDTO savedHabitLog = habitMapper.findTodayHabitLog(TEMP_USER_ID, habitId, today);
+        HabitLogDTO savedHabitLog = habitMapper.findTodayHabitLog(userId, habitId, today);
 
         return toCompleteResponse(habitId, savedHabitLog, true, statResult);
     }
@@ -192,8 +192,8 @@ public class HabitService {
 
 
     //Today Habit Service
-    public List<HabitTodayResponse> getTodayHabitsWishCompletion(){
-        return habitMapper.findTodayHabitsWithCompletion(TEMP_USER_ID);
+    public List<HabitTodayResponse> getTodayHabitsWishCompletion(Long userId){
+        return habitMapper.findTodayHabitsWithCompletion(userId);
     }
 
 

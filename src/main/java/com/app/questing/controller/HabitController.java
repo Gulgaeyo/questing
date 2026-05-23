@@ -18,25 +18,33 @@ public class HabitController {
     private final HabitService habitService;
 
     @GetMapping
-    public List<HabitDTO> getTodayHabits(){return habitService.getTodayHabits();}
+    public List<HabitDTO> getTodayHabits(@RequestAttribute Long userId){
+        return habitService.getTodayHabits(userId);
+    }
 
     @PostMapping
-    public HabitDTO createHabit(@RequestBody HabitCreateRequest request) {
-        return habitService.createHabit(request);
+    public HabitDTO createHabit(@RequestAttribute Long userId,
+                                @RequestBody HabitCreateRequest request) {
+        return habitService.createHabit(userId, request);
     }
 
     @PutMapping("/{habitId}")
-    public HabitDTO updateHabit(@PathVariable Long habitId,
+    public HabitDTO updateHabit(@RequestAttribute Long userId,
+                                @PathVariable Long habitId,
                                 @RequestBody HabitUpdateRequest request){
-        return habitService.updateHabit(habitId, request);
+        return habitService.updateHabit(userId, habitId, request);
     }
 
     @DeleteMapping("/{habitId}")
-    public void deleteHabit(@PathVariable Long habitId){habitService.deleteHabit(habitId);}
+    public void deleteHabit(@RequestAttribute Long userId,
+                            @PathVariable Long habitId){
+        habitService.deleteHabit(userId, habitId);
+    }
 
     @PatchMapping("/{habitId}/complete")
-    public QuestCompleteResponse completeHabit(@PathVariable Long habitId){
-        return habitService.completeHabit(habitId);
+    public QuestCompleteResponse completeHabit(@RequestAttribute Long userId,
+                                               @PathVariable Long habitId){
+        return habitService.completeHabit(userId, habitId);
     }
 
 

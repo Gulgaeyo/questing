@@ -46,5 +46,10 @@
         WHERE user_id = #{userId}
     </update>
 
+    <insert id="insertUserStat">
+        INSERT INTO user_stats(user_id)
+        VALUES (#{userId})
+    </insert>
+
 
 </mapper>

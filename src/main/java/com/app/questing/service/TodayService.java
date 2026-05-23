@@ -13,12 +13,12 @@ public class TodayService {
     private final TodoService todoService;
     private final HabitService habitService;
 
-    public TodayResponse getToday(){
+    public TodayResponse getToday(Long userId){
         TodayResponse response = new TodayResponse();
 
         response.setToday(LocalDate.now());
-        response.setTodos(todoService.getTodayTodos());
-        response.setHabits(habitService.getTodayHabitsWishCompletion());
+        response.setTodos(todoService.getTodayTodos(userId));
+        response.setHabits(habitService.getTodayHabitsWishCompletion(userId));
 
         return response;
 
