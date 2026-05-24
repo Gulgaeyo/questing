@@ -47,21 +47,21 @@ TODO나 HABIT을 완료하면 `durationTime`이 경험치처럼 사용됩니다.
 - JWT 인터셉터를 통한 보호 API 인증
 - 토큰에서 추출한 `userId` 기반 TODO/HABIT/TODAY 데이터 분리
 - 로그인 실패와 중복 가입에 대한 전역 예외 처리
+- JWT 인증 실패 응답 body 정리
+- TODO/HABIT/UserStat 도메인 예외 응답 정리
 - TODO CRUD
 - TODO 완료 처리
 - HABIT CRUD
 - HABIT 완료 처리
 - HABIT 완료 기록을 `habit_logs`에 저장
 - TODAY 전체 조회
+- User Stat 조회 API
 - `durationTime` 기반 스탯 성장 처리
 
 진행 예정:
 
 - Refresh token 흐름
-- JWT 인증 실패 응답 body 개선
 - `@Valid` 기반 요청값 검증
-- TODO/HABIT 도메인 예외 응답 정리
-- User Stat 조회 API
 - 인증, TODO, HABIT, 스탯 성장 테스트 코드 작성
 
 ---
@@ -109,6 +109,7 @@ JWT 인터셉터는 토큰을 검증하고, 토큰의 subject에서 `userId`를 
 - `/api/todos/**`
 - `/api/habits/**`
 - `/api/today/**`
+- `/api/stats/**`
 
 토큰 없이 접근 가능한 경로:
 
@@ -235,6 +236,34 @@ Request:
 ```
 
 로그인 실패는 `401 Unauthorized`를 응답합니다.
+
+---
+
+## 에러 응답 정책
+
+Questing은 주요 API 오류를 HTTP 상태 코드와 JSON body로 응답합니다.
+
+공통 응답 형태:
+
+```json
+{
+  "timestamp": "2026-05-24T19:30:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "존재하지 않는 TODO입니다."
+}
+```
+
+현재 정리된 예외 응답:
+
+| 상황 | HTTP Status |
+|---|---|
+| 로그인 실패 | `401 Unauthorized` |
+| JWT 토큰 없음 | `401 Unauthorized` |
+| JWT 토큰 형식 오류 또는 검증 실패 | `401 Unauthorized` |
+| 중복 회원가입 | `409 Conflict` |
+| 존재하지 않는 TODO/HABIT/UserStat | `404 Not Found` |
+| 지원하지 않는 category 등 잘못된 요청 | `400 Bad Request` |
 
 ---
 
@@ -397,6 +426,40 @@ Authorization: Bearer {accessToken}
 
 ---
 
+### Stat API
+
+Stat API는 access token이 필요합니다.
+
+```http
+Authorization: Bearer {accessToken}
+```
+
+#### 사용자 스탯 조회
+
+`GET /api/stats`
+
+로그인한 사용자의 현재 성장 수치와 다음 성장까지 누적된 시간을 조회합니다.
+
+응답 예시:
+
+```json
+{
+  "userId": 2,
+  "strengthStat": 1,
+  "strengthMinutes": 20,
+  "mentalStat": 1,
+  "mentalMinutes": 0,
+  "intelligenceStat": 7,
+  "intelligenceMinutes": 0,
+  "createdAt": "2026-05-23T16:20:35.846168",
+  "updatedAt": "2026-05-24T17:59:08.756554"
+}
+```
+
+`strengthMinutes`, `mentalMinutes`, `intelligenceMinutes`는 다음 스탯 증가까지 누적된 잔여 시간입니다. 예를 들어 `strengthMinutes`가 `20`이면, 10분을 더 완료했을 때 `strengthStat`이 1 증가합니다.
+
+---
+
 ## 주요 테이블
 
 | 테이블 | 역할 |
@@ -413,8 +476,7 @@ Authorization: Bearer {accessToken}
 
 추천 다음 작업:
 
-1. User Stat 조회 API 추가
-2. JWT 인증 실패 응답 body 개선
-3. 회원가입, 로그인, TODO, HABIT 요청값 검증 추가
-4. 인증과 사용자별 데이터 분리 테스트 코드 작성
-5. Refresh token 흐름 설계
+1. 회원가입, 로그인, TODO, HABIT 요청값 검증 추가
+2. 인증과 사용자별 데이터 분리 테스트 코드 작성
+3. Refresh token 흐름 설계
+4. README API 문서와 실제 응답 구조 지속 동기화
