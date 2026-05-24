@@ -3,6 +3,7 @@ package com.app.questing.service;
 import com.app.questing.dto.habit.*;
 import com.app.questing.dto.quest.QuestCompleteResponse;
 import com.app.questing.dto.stat.UserStatResult;
+import com.app.questing.exception.ResourceNotFoundException;
 import com.app.questing.mapper.HabitMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class HabitService {
         HabitDTO habit = habitMapper.findHabitById(habitId, userId);
 
         if(habit == null){
-            throw new IllegalArgumentException("존재하지 않는 Habit입니다.");
+            throw new ResourceNotFoundException("존재하지 않는 Habit입니다.");
         }
 
         habit.setTitle(request.getTitle());
@@ -66,7 +67,7 @@ public class HabitService {
         int updatedCount = habitMapper.updateHabit(habit);
 
         if(updatedCount == 0){
-            throw new IllegalArgumentException("Habit 수정에 실패했습니다.");
+            throw new ResourceNotFoundException("Habit 수정에 실패했습니다.");
         }
 
         HabitDTO updatedHabit = habitMapper.findHabitById(habitId, userId);
@@ -79,7 +80,7 @@ public class HabitService {
         int deletedCount = habitMapper.deleteHabit(habitId, userId);
 
         if(deletedCount == 0){
-            throw new IllegalArgumentException("존재하지 않는 Habit입니다.");
+            throw new ResourceNotFoundException("존재하지 않는 Habit입니다.");
         }
     }
 
@@ -109,7 +110,7 @@ public class HabitService {
         HabitDTO habit = habitMapper.findHabitById(habitId, userId);
 
         if(habit == null) {
-            throw new IllegalArgumentException("존재하지 않는 Habit입니다.");
+            throw new ResourceNotFoundException("존재하지 않는 Habit입니다.");
         }
 
         HabitLogDTO todayLog = habitMapper.findTodayHabitLog(userId, habitId, today);

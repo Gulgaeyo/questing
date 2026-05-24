@@ -1,7 +1,10 @@
 package com.app.questing.service;
 
 import com.app.questing.dto.stat.UserStatDTO;
+import com.app.questing.dto.stat.UserStatResponse;
 import com.app.questing.dto.stat.UserStatResult;
+import com.app.questing.exception.BadRequestException;
+import com.app.questing.exception.ResourceNotFoundException;
 import com.app.questing.mapper.UserStatMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,22 +17,29 @@ public class UserStatService {
 
     private final UserStatMapper userStatMapper;
 
-    public UserStatDTO getUserStat(Long userId){
-        return userStatMapper.findByUserId(userId);
+    public UserStatResponse getUserStat(Long userId) {
+        UserStatDTO userStat = userStatMapper.findByUserId(userId);
+
+        if(userStat == null){
+            throw new ResourceNotFoundException("사용자 스텟 정보가 존재하지 않습니다.");
+        }
+
+        return toResponse(userStat);
     }
+
 
     public UserStatResult addProgress(Long userId, String category, Integer durationTime){
         UserStatDTO userStat = userStatMapper.findByUserId(userId);
 
         if(userStat == null){
-            throw new IllegalArgumentException("사용자 스탯 정보가 존재하지 않습니다.");
+            throw new ResourceNotFoundException("사용자 스탯 정보가 존재하지 않습니다.");
         }
 
         return switch (category) {
             case "STRENGTH" -> addStrength(userStat, durationTime);
             case "MENTAL" -> addMental(userStat, durationTime);
             case "INTELLIGENCE" -> addIntelligence(userStat, durationTime);
-            default -> throw new IllegalArgumentException("지원하지 않는 카테고리입니다.");
+            default -> throw new BadRequestException("지원하지 않는 카테고리입니다.");
         };
     }
 
@@ -92,5 +102,23 @@ public class UserStatService {
         result.setCurrentStat(currentStat);
 
         return result;
+    }
+
+
+
+    private UserStatResponse toResponse(UserStatDTO userStat) {
+        UserStatResponse response = new UserStatResponse();
+
+        response.setUserId(userStat.getUserId());
+        response.setStrengthStat(userStat.getStrStat());
+        response.setStrengthMinutes(userStat.getStrMin());
+        response.setMentalStat(userStat.getMenStat());
+        response.setMentalMinutes(userStat.getMenMin());
+        response.setIntelligenceStat(userStat.getIntStat());
+        response.setIntelligenceMinutes(userStat.getIntMin());
+        response.setCreatedAt(userStat.getCreatedAt());
+        response.setUpdatedAt(userStat.getUpdatedAt());
+
+        return response;
     }
 }

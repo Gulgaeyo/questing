@@ -6,6 +6,7 @@ import com.app.questing.dto.todo.TodoCreateRequest;
 import com.app.questing.dto.todo.TodoDTO;
 import com.app.questing.dto.todo.TodoResponse;
 import com.app.questing.dto.todo.TodoUpdateRequest;
+import com.app.questing.exception.ResourceNotFoundException;
 import com.app.questing.mapper.TodoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class TodoService {
         TodoDTO todo = todoMapper.findTodoById(todoId, userId);
 
         if(todo == null) {
-            throw new IllegalArgumentException("존재하지 않는 TODO입니다.");
+            throw new ResourceNotFoundException("존재하지 않는 TODO입니다.");
         }
 
         todo.setTitle(request.getTitle());
@@ -62,7 +63,7 @@ public class TodoService {
         int updatedCount = todoMapper.updateTodo(todo);
 
         if(updatedCount == 0) {
-            throw new IllegalArgumentException("TODO 수정에 실패했습니다.");
+            throw new ResourceNotFoundException("TODO 수정에 실패했습니다.");
         }
 
         TodoDTO updatedTodo = todoMapper.findTodoById(todoId, userId);
@@ -73,7 +74,7 @@ public class TodoService {
         int deletedCount = todoMapper.deleteTodo(todoId, userId);
 
         if (deletedCount == 0){
-            throw new IllegalArgumentException("존재하지 않는 TODO 입니다.");
+            throw new ResourceNotFoundException("존재하지 않는 TODO 입니다.");
         }
     }
 
@@ -81,7 +82,7 @@ public class TodoService {
         TodoDTO todo = todoMapper.findTodoById(todoId, userId);
 
         if(todo == null){
-            throw new IllegalArgumentException("존재하지 않는 TODO입니다.");
+            throw new ResourceNotFoundException("존재하지 않는 TODO입니다.");
         }
 
         if(Boolean.TRUE.equals(todo.getIsCompleted())){
@@ -91,7 +92,7 @@ public class TodoService {
         int completedCount = todoMapper.completeTodo(todoId, userId);
 
         if (completedCount == 0){
-            throw new IllegalArgumentException("TODO 완료 처리에 실패했습니다.");
+            throw new ResourceNotFoundException("TODO 완료 처리에 실패했습니다.");
         }
 
         UserStatResult statResult = userStatService.addProgress(

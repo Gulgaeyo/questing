@@ -17,7 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns(
                         "/api/todos/**",
                         "/api/habits/**",
-                        "/api/today/**"
+                        "/api/today/**",
+                        "/api/stats/**"
                 );
     }
 }
