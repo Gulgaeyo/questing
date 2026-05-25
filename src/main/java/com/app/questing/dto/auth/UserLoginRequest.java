@@ -1,11 +1,15 @@
 package com.app.questing.dto.auth;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class UserLoginRequest {
 
-    public String loginId;
-    public String password;
+    @NotBlank(message = "아이디는 필수입니다.")
+    private String loginId;
+
+    @NotBlank(message = "비밀번호는 필수입니다.")
+    private String password;
 
 }

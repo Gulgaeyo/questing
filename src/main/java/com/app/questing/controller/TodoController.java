@@ -5,6 +5,7 @@ import com.app.questing.dto.todo.TodoCreateRequest;
 import com.app.questing.dto.todo.TodoResponse;
 import com.app.questing.dto.todo.TodoUpdateRequest;
 import com.app.questing.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +25,14 @@ public class TodoController {
 
     @PostMapping
     public TodoResponse createTodo(@RequestAttribute Long userId,
-                                   @RequestBody TodoCreateRequest request) {
+                                   @Valid @RequestBody TodoCreateRequest request) {
         return todoService.createTodo(userId, request);
     }
 
     @PutMapping("/{todoId}")
     public TodoResponse updateTodo(@RequestAttribute Long userId,
                                    @PathVariable Long todoId,
-                                   @RequestBody TodoUpdateRequest request) {
+                                   @Valid @RequestBody TodoUpdateRequest request) {
         return todoService.updateTodo(userId, todoId, request);
     }
 

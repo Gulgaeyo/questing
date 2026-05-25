@@ -5,6 +5,7 @@ import com.app.questing.dto.auth.UserLoginRequest;
 import com.app.questing.dto.user.UserResponse;
 import com.app.questing.dto.user.UserSignupRequest;
 import com.app.questing.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +17,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public UserResponse signup(@RequestBody UserSignupRequest request) {
+    public UserResponse signup(@Valid @RequestBody UserSignupRequest request) {
         return userService.signup(request);
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody UserLoginRequest request){
+    public LoginResponse login(@Valid @RequestBody UserLoginRequest request){
         return userService.login(request);
     }
 

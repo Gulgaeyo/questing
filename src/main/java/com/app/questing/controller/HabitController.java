@@ -5,6 +5,7 @@ import com.app.questing.dto.habit.HabitDTO;
 import com.app.questing.dto.habit.HabitUpdateRequest;
 import com.app.questing.dto.quest.QuestCompleteResponse;
 import com.app.questing.service.HabitService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +25,14 @@ public class HabitController {
 
     @PostMapping
     public HabitDTO createHabit(@RequestAttribute Long userId,
-                                @RequestBody HabitCreateRequest request) {
+                                @Valid @RequestBody HabitCreateRequest request) {
         return habitService.createHabit(userId, request);
     }
 
     @PutMapping("/{habitId}")
     public HabitDTO updateHabit(@RequestAttribute Long userId,
                                 @PathVariable Long habitId,
-                                @RequestBody HabitUpdateRequest request){
+                                @Valid @RequestBody HabitUpdateRequest request){
         return habitService.updateHabit(userId, habitId, request);
     }
 
