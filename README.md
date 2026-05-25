@@ -49,6 +49,7 @@ TODO나 HABIT을 완료하면 `durationTime`이 경험치처럼 사용됩니다.
 - 로그인 실패와 중복 가입에 대한 전역 예외 처리
 - JWT 인증 실패 응답 body 정리
 - TODO/HABIT/UserStat 도메인 예외 응답 정리
+- `@Valid` 기반 요청값 검증
 - TODO CRUD
 - TODO 완료 처리
 - HABIT CRUD
@@ -61,7 +62,6 @@ TODO나 HABIT을 완료하면 `durationTime`이 경험치처럼 사용됩니다.
 진행 예정:
 
 - Refresh token 흐름
-- `@Valid` 기반 요청값 검증
 - 인증, TODO, HABIT, 스탯 성장 테스트 코드 작성
 
 ---
@@ -264,6 +264,52 @@ Questing은 주요 API 오류를 HTTP 상태 코드와 JSON body로 응답합니
 | 중복 회원가입 | `409 Conflict` |
 | 존재하지 않는 TODO/HABIT/UserStat | `404 Not Found` |
 | 지원하지 않는 category 등 잘못된 요청 | `400 Bad Request` |
+| 요청값 검증 실패 | `400 Bad Request` |
+
+---
+
+## 요청값 검증 정책
+
+회원가입, 로그인, TODO, HABIT 요청은 `@Valid` 기반으로 검증합니다.
+
+검증 실패 시 `400 Bad Request`와 함께 필드별 오류 메시지를 응답합니다.
+
+응답 예시:
+
+```json
+{
+  "timestamp": "2026-05-25T19:30:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "요청값 검증에 실패했습니다.",
+  "fieldErrors": {
+    "title": "TODO 제목은 필수입니다.",
+    "durationTime": "진행 시간은 1분 이상이어야 합니다."
+  }
+}
+```
+
+### TODO 검증 규칙
+
+| 필드 | 규칙 |
+|---|---|
+| `timeSlot` | 필수 |
+| `title` | 필수 |
+| `category` | 필수 |
+| `durationTime` | 필수, 1분 이상 |
+
+### HABIT 검증 규칙
+
+| 필드 | 규칙 |
+|---|---|
+| `title` | 필수 |
+| `content` | 필수 |
+| `category` | 필수 |
+| `durationTime` | 필수, 1분 이상 |
+| `strtDate` | 필수 |
+| `endDate` | 선택값, 입력 시 오늘 또는 미래 날짜 |
+
+`endDate`가 없는 장기 HABIT은 프론트에서 `9999-12-31`을 보내는 방식으로 처리합니다.
 
 ---
 
@@ -299,6 +345,8 @@ Request:
 #### Todo 수정
 
 `PUT /api/todos/{todoId}`
+
+Todo 수정은 전체 수정 방식입니다. 프론트는 수정하지 않은 기존 값도 포함해 전체 필드를 다시 전송합니다.
 
 Request:
 
@@ -350,6 +398,8 @@ Request:
 }
 ```
 
+기한 미정 HABIT은 프론트에서 `endDate`를 `9999-12-31`로 전송합니다.
+
 #### 오늘 Habit 조회
 
 `GET /api/habits`
@@ -359,6 +409,21 @@ Request:
 #### Habit 수정
 
 `PUT /api/habits/{habitId}`
+
+Habit 수정은 전체 수정 방식입니다. 프론트는 수정하지 않은 기존 값도 포함해 전체 필드를 다시 전송합니다.
+
+Request:
+
+```json
+{
+  "title": "명상",
+  "content": "30분 명상하기",
+  "category": "MENTAL",
+  "durationTime": 30,
+  "strtDate": "2026-05-25",
+  "endDate": "9999-12-31"
+}
+```
 
 #### Habit 완료
 
