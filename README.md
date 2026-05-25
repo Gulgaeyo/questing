@@ -50,6 +50,7 @@ TODO나 HABIT을 완료하면 `durationTime`이 경험치처럼 사용됩니다.
 - JWT 인증 실패 응답 body 정리
 - TODO/HABIT/UserStat 도메인 예외 응답 정리
 - `@Valid` 기반 요청값 검증
+- 회원가입/로그인/TODO/HABIT 요청값 검증 컨트롤러 테스트 코드
 - TODO CRUD
 - TODO 완료 처리
 - HABIT CRUD
@@ -541,7 +542,8 @@ Authorization: Bearer {accessToken}
 
 추천 다음 작업:
 
-1. 회원가입, 로그인, TODO, HABIT 요청값 검증 추가
+1. 인증 실패/권한 실패 테스트 코드 작성
 2. 인증과 사용자별 데이터 분리 테스트 코드 작성
-3. Refresh token 흐름 설계
-4. README API 문서와 실제 응답 구조 지속 동기화
+3. TODO/HABIT 완료 처리 테스트 코드 작성
+4. Refresh token 흐름 설계
+5. README API 문서와 실제 응답 구조 지속 동기화
