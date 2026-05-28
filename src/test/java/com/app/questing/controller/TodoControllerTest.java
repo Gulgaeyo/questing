@@ -2,6 +2,7 @@ package com.app.questing.controller;
 
 import com.app.questing.config.JwtProvider;
 import com.app.questing.service.TodoService;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -9,8 +10,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,5 +79,39 @@ class TodoControllerTest {
                 .andExpect(jsonPath("$.fieldErrors.title").exists())
                 .andExpect(jsonPath("$.fieldErrors.category").exists())
                 .andExpect(jsonPath("$.fieldErrors.durationTime").exists());
+    }
+
+    @Test
+    void getTodoWithoutTokenFail() throws Exception {
+        mockMvc.perform(get("/api/todos"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.error").value("Unauthorized"))
+                .andExpect(jsonPath("$.message").value("인증 토큰이 필요합니다."));
+    }
+
+    @Test
+    void getTodoWithInvalidAuthorizationFormatFail() throws Exception {
+        mockMvc.perform(get("/api/todos")
+                        .header("Authorization", "invalid-token"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.error").value("Unauthorized"))
+                .andExpect(jsonPath("$.message").value("인증 토큰이 필요합니다."));
+    }
+
+    @Test
+    void getTodoWithInvalidTokenFail() throws Exception {
+        willThrow(new JWTVerificationException("invalid token"))
+                .given(jwtProvider)
+                .getUserId("invalid-token");
+
+        mockMvc.perform(get("/api/todos")
+                        .header("Authorization", "Bearer invalid-token"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.error").value("Unauthorized"))
+                .andExpect(jsonPath("$.message").value("유효하지 않은 토큰입니다."));
+
     }
 }
