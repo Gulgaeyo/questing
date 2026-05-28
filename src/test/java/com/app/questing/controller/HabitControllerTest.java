@@ -1,6 +1,7 @@
 package com.app.questing.controller;
 
 import com.app.questing.config.JwtProvider;
+import com.app.questing.dto.habit.HabitDTO;
 import com.app.questing.service.HabitService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -82,5 +87,33 @@ public class HabitControllerTest {
                 .andExpect(jsonPath("$.fieldErrors.durationTime").exists())
                 .andExpect(jsonPath("$.fieldErrors.strtDate").exists())
                 .andExpect(jsonPath("$.fieldErrors.endDate").exists());
+    }
+
+    @Test
+    void getHabitWithAuthenticatedUserId() throws Exception {
+        given(jwtProvider.getUserId("valid-token")).willReturn(2L);
+
+        HabitDTO habit = new HabitDTO();
+        habit.setId(1L);
+        habit.setUserId(2L);
+        habit.setCategory("INTELLIGENCE");
+        habit.setTitle("test");
+        habit.setContent("test case");
+        habit.setDurationTime(30);
+        habit.setStrtDate(LocalDate.of(2026, 5, 26));
+        habit.setEndDate(LocalDate.of(2026, 5, 31));
+
+        given(habitService.getTodayHabits(2L)).willReturn(List.of(habit));
+
+        mockMvc.perform(get("/api/habits")
+                        .header("Authorization", "Bearer valid-token"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].userId").value(2))
+                .andExpect(jsonPath("$[0].title").value("test"));
+
+        then(habitService)
+                .should(times(1))
+                .getTodayHabits(2L);
     }
 }
