@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class TodoResponse {
-    private Long Id;
+    private Long id;
     private Long userId;
     private LocalDate todoDate;
     private String timeSlot;

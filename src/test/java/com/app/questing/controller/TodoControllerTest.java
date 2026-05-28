@@ -1,6 +1,7 @@
 package com.app.questing.controller;
 
 import com.app.questing.config.JwtProvider;
+import com.app.questing.dto.todo.TodoResponse;
 import com.app.questing.service.TodoService;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,9 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
+import java.util.List;
+
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -113,5 +115,32 @@ class TodoControllerTest {
                 .andExpect(jsonPath("$.error").value("Unauthorized"))
                 .andExpect(jsonPath("$.message").value("유효하지 않은 토큰입니다."));
 
+    }
+
+    @Test
+    void getTodoWithAuthenticatedUserId() throws Exception {
+        given(jwtProvider.getUserId("valid-token")).willReturn(2L);
+
+        TodoResponse todo = new TodoResponse();
+        todo.setId(1L);
+        todo.setUserId(2L);
+        todo.setTitle("코딩 문제 풀기");
+        todo.setCategory("INTELLIGENCE");
+        todo.setTimeSlot("MORNING");
+        todo.setDurationTime(30);
+        todo.setIsCompleted(false);
+
+        given(todoService.getTodayTodos(2L)).willReturn(List.of(todo));
+
+        mockMvc.perform(get("/api/todos")
+                        .header("Authorization", "Bearer valid-token"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].userId").value(2))
+                .andExpect(jsonPath("$[0].title").value("코딩 문제 풀기"));
+
+        then(todoService)
+                .should(times(1))
+                .getTodayTodos(2L);
     }
 }
