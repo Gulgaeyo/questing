@@ -53,6 +53,7 @@ TODO나 HABIT을 완료하면 `durationTime`이 경험치처럼 사용됩니다.
 - 회원가입/로그인/TODO/HABIT 요청값 검증 컨트롤러 테스트 코드
 - JWT 인증 실패 컨트롤러 테스트 코드
 - TODO/HABIT/TODAY 사용자별 데이터 분리 컨트롤러 테스트 코드
+- TODO/HABIT 완료 처리 컨트롤러 테스트 코드
 - TODO CRUD
 - TODO 완료 처리
 - HABIT CRUD
@@ -544,6 +545,5 @@ Authorization: Bearer {accessToken}
 
 추천 다음 작업:
 
-1. TODO/HABIT 완료 처리 테스트 코드 작성
-2. Refresh token 흐름 설계
-3. README API 문서와 실제 응답 구조 지속 동기화
+1. Refresh token 흐름 설계
+2. README API 문서와 실제 응답 구조 지속 동기화
